@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  certbot:
+    container_name: certbot
+    build:
+      context: ./config
+      args:
+        CERTBOT_IMAGE_TAG: ${CERTBOT_IMAGE_TAG}
+    image: certbot-w-extras:${CERTBOT_IMAGE_TAG}
+    environment:
+      CERT_NAME: ${CERT_NAME}
+      CERT_DOMAINS: ${CERT_DOMAINS}
+      CERT_KEY_SIZE: ${CERT_KEY_SIZE}
+      CERT_CONTACT_EMAIL: ${CERT_CONTACT_EMAIL}
+      CERTBOT_EXECUTION_MODE: ${CERTBOT_EXECUTION_MODE}
+    volumes:
+      - ./logs:/var/log/letsencrypt
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - certbot-network
+
+networks:
+  certbot-network:
+    name: certbot-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.255.0/28
