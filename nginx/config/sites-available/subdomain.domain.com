@@ -11,9 +11,9 @@ server {
   listen [::]:443 ssl http2;
   server_name subdomain.domain.com;
 
-  root /var/www/app;
+  #root /var/www/app;
   charset UTF-8;
-  index index.html;
+  #index index.html
 
   ## GLOBALS ##
 #  include /etc/nginx/globals/cache.conf;
@@ -21,15 +21,12 @@ server {
   include /etc/nginx/globals/secure.conf;
   include /etc/nginx/globals/ssl.conf;
 
-  access_log /var/log/nginx/fp/access.log;
-  error_log /var/log/nginx/fp/error.log;
-
 #  if ($bad_referer) {
 #    return 444;
 #  }
 
-  location /app {
-    set $upstream http://subdomain.domain.com:3000;
+  location / {
+    set $upstream http://web-app-container:3000;
 
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
@@ -49,7 +46,7 @@ server {
        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
     }
 
-    proxy_set_header Access-Control-Allow-Origin 'https://subdomain.domain.com';
+    #proxy_set_header Access-Control-Allow-Origin 'https://subdomain.domain.com';
 
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -72,7 +69,7 @@ server {
     proxy_pass $upstream;
   }
 
-  location / {
-    try_files $uri $uri/ /index.html =404;
-  }
+  #location / {
+  #  try_files $uri $uri/  =404;
+  #}
 }

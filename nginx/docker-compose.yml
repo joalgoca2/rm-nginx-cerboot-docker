@@ -27,13 +27,8 @@ services:
       retries: 3
       start_period: 5s
     networks:
-      - web-server-network
+      - docker-network
 
 networks:
-  web-server-network:
-    name: web-server-network
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet : 192.168.100.0/24
+  docker-network:
+    external: true
