@@ -14,11 +14,17 @@ services:
       CERT_KEY_SIZE: ${CERT_KEY_SIZE}
       CERT_CONTACT_EMAIL: ${CERT_CONTACT_EMAIL}
       CERTBOT_EXECUTION_MODE: ${CERTBOT_EXECUTION_MODE}
+    secrets:
+      - cloudflare-api-token
     volumes:
       - ./logs:/var/log/letsencrypt
       - ./letsencrypt:/etc/letsencrypt
     networks:
       - certbot-network
+
+secrets:
+  cloudflare-api-token:
+    file: ./config/secrets/cloudflare.ini
 
 networks:
   certbot-network:
